@@ -1,0 +1,4347 @@
+{
+  "metadata": {
+    "extractedAt": "2025-12-12T23:18:30.218Z",
+    "projectName": "InteractGenxSRM17",
+    "framework": "Next.js + Express"
+  },
+  "pages": [
+    {
+      "path": "/inventory",
+      "file": "client\\app\\inventory\\page.js",
+      "title": "Inventory",
+      "components": [
+        {
+          "name": "Layout",
+          "from": "../../components/Layout"
+        },
+        {
+          "name": "EditModal",
+          "from": "../../components/EditModal"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "inventoryAPI",
+          "method": "getProducts",
+          "params": "{ low_stock: showLowStock ? 'true' : undefined }"
+        },
+        {
+          "api": "inventoryAPI",
+          "method": "getProductStats",
+          "params": ""
+        },
+        {
+          "api": "inventoryAPI",
+          "method": "getStockMovements",
+          "params": "{ limit: 100 }"
+        },
+        {
+          "api": "inventoryAPI",
+          "method": "updateProduct",
+          "params": "editModal.data.id, formData"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Products",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Stock Movements",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "e.currentTarget.style.background = 'rgba(255, 255,",
+          "onClick": null,
+          "type": "default",
+          "className": "btn"
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        }
+      ],
+      "links": [],
+      "forms": [
+        {
+          "name": "productFields",
+          "fields": [
+            {
+              "name": "sku",
+              "label": "SKU",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "name",
+              "label": "Product Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "description",
+              "label": "Description",
+              "type": "textarea",
+              "required": false
+            },
+            {
+              "name": "category",
+              "label": "Category",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "price",
+              "label": "Price",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "cost",
+              "label": "Cost",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "stock_quantity",
+              "label": "Stock Quantity",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "low_stock_threshold",
+              "label": "Low Stock Threshold",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            }
+          ]
+        }
+      ],
+      "tabs": [
+        "products",
+        "movements"
+      ],
+      "tables": [
+        {
+          "headers": [
+            "SKU",
+            "Name",
+            "Category",
+            "Price",
+            "Cost",
+            "Stock",
+            "Low Stock Threshold",
+            "Status",
+            "Actions"
+          ]
+        },
+        {
+          "headers": [
+            "Date",
+            "Product",
+            "SKU",
+            "Type",
+            "Quantity",
+            "Reason",
+            "Reference"
+          ]
+        }
+      ],
+      "editModalPattern": {
+        "hasEditModalState": true,
+        "handleEdit": "setEditModal({ isOpen: true, data: product",
+        "handleSave": "\n    try {\n      setSaving(true);\n      await inventoryAPI.updateProduct(editModal.data.id, formData);\n      setEditModal({ isOpen: false, data: null });\n      fetchData();",
+        "modalProps": {
+          "isOpen": "editModal.isOpen",
+          "onClose": "() => setEditModal({ isOpen: false, data: null",
+          "title": "Edit Product",
+          "fields": "productFields",
+          "data": "editModal.data",
+          "onSave": "handleSave"
+        },
+        "apiCall": {
+          "api": "inventoryAPI",
+          "method": "updateProduct",
+          "params": "editModal.data.id, formData"
+        }
+      },
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "products",
+          "setterName": "setProducts",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "stockMovements",
+          "setterName": "setStockMovements",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "productStats",
+          "setterName": "setProductStats",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "activeTab",
+          "setterName": "setActiveTab",
+          "initialValue": "'products'"
+        },
+        {
+          "type": "useState",
+          "stateName": "showLowStock",
+          "setterName": "setShowLowStock",
+          "initialValue": "false"
+        },
+        {
+          "type": "useState",
+          "stateName": "editModal",
+          "setterName": "setEditModal",
+          "initialValue": "{ isOpen: false, data: null }"
+        },
+        {
+          "type": "useState",
+          "stateName": "saving",
+          "setterName": "setSaving",
+          "initialValue": "false"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [
+            "activeTab",
+            "showLowStock"
+          ],
+          "body": "\n    fetchData();\n  "
+        }
+      ]
+    },
+    {
+      "path": "/logistics",
+      "file": "client\\app\\logistics\\page.js",
+      "title": "Logistics",
+      "components": [
+        {
+          "name": "Layout",
+          "from": "../../components/Layout"
+        },
+        {
+          "name": "EditModal",
+          "from": "../../components/EditModal"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "logisticsAPI",
+          "method": "getShipments",
+          "params": ""
+        },
+        {
+          "api": "logisticsAPI",
+          "method": "getShipmentStats",
+          "params": ""
+        },
+        {
+          "api": "logisticsAPI",
+          "method": "getWarehouses",
+          "params": ""
+        },
+        {
+          "api": "logisticsAPI",
+          "method": "updateShipment",
+          "params": "editModal.data.id, formData"
+        },
+        {
+          "api": "logisticsAPI",
+          "method": "updateWarehouse",
+          "params": "editModal.data.id, formData"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Shipments",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Warehouses",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        }
+      ],
+      "links": [],
+      "forms": [
+        {
+          "name": "shipmentFields",
+          "fields": [
+            {
+              "name": "tracking_number",
+              "label": "Tracking Number",
+              "type": "text",
+              "required": false
+            },
+            {
+              "name": "carrier",
+              "label": "Carrier",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "origin_address",
+              "label": "Origin Address",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "destination_address",
+              "label": "Destination Address",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "estimated_delivery",
+              "label": "Estimated Delivery",
+              "type": "date",
+              "required": false
+            },
+            {
+              "name": "actual_delivery",
+              "label": "Actual Delivery",
+              "type": "date",
+              "required": false
+            },
+            {
+              "name": "shipping_cost",
+              "label": "Shipping Cost",
+              "type": "number",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "warehouseFields",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Warehouse Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "location",
+              "label": "Location",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "capacity",
+              "label": "Capacity",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "current_stock",
+              "label": "Current Stock",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            }
+          ]
+        }
+      ],
+      "tabs": [
+        "shipments",
+        "warehouses"
+      ],
+      "tables": [
+        {
+          "headers": [
+            "Tracking #",
+            "Order #",
+            "Customer",
+            "Carrier",
+            "Status",
+            "Origin",
+            "Destination",
+            "Est. Delivery",
+            "Cost",
+            "Actions"
+          ]
+        }
+      ],
+      "editModalPattern": {
+        "hasEditModalState": true,
+        "handleEdit": "setEditModal({ isOpen: true, type, data: item",
+        "handleSave": "\n    try {\n      setSaving(true);\n      if (editModal.type === 'shipment') {\n        await logisticsAPI.updateShipment(editModal.data.id, formData);",
+        "modalProps": {
+          "isOpen": "editModal.isOpen",
+          "onClose": "() => setEditModal({ isOpen: false, type: null, data: null",
+          "title": null,
+          "fields": "editModal.type === 'shipment' ? shipmentFields : warehouseFields",
+          "data": "editModal.data",
+          "onSave": "handleSave"
+        },
+        "apiCall": {
+          "api": "logisticsAPI",
+          "method": "updateShipment",
+          "params": "editModal.data.id, formData"
+        }
+      },
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "shipments",
+          "setterName": "setShipments",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "warehouses",
+          "setterName": "setWarehouses",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "shipmentStats",
+          "setterName": "setShipmentStats",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "activeTab",
+          "setterName": "setActiveTab",
+          "initialValue": "'shipments'"
+        },
+        {
+          "type": "useState",
+          "stateName": "editModal",
+          "setterName": "setEditModal",
+          "initialValue": "{ isOpen: false, type: null, data: null }"
+        },
+        {
+          "type": "useState",
+          "stateName": "saving",
+          "setterName": "setSaving",
+          "initialValue": "false"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [
+            "activeTab"
+          ],
+          "body": "\n    fetchData();\n  "
+        }
+      ]
+    },
+    {
+      "path": "/marketing",
+      "file": "client\\app\\marketing\\page.js",
+      "title": "Marketing",
+      "components": [
+        {
+          "name": "Layout",
+          "from": "../../components/Layout"
+        },
+        {
+          "name": "EditModal",
+          "from": "../../components/EditModal"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "marketingAPI",
+          "method": "getCampaigns",
+          "params": ""
+        },
+        {
+          "api": "marketingAPI",
+          "method": "getPromotions",
+          "params": ""
+        },
+        {
+          "api": "marketingAPI",
+          "method": "updateCampaign",
+          "params": "editModal.data.id, formData"
+        },
+        {
+          "api": "marketingAPI",
+          "method": "updatePromotion",
+          "params": "editModal.data.id, formData"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Campaigns",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Promotions",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        }
+      ],
+      "links": [],
+      "forms": [
+        {
+          "name": "campaignFields",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Campaign Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "type",
+              "label": "Type",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "budget",
+              "label": "Budget",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "spent",
+              "label": "Spent",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "impressions",
+              "label": "Impressions",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "clicks",
+              "label": "Clicks",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "conversions",
+              "label": "Conversions",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "start_date",
+              "label": "Start Date",
+              "type": "date",
+              "required": true
+            },
+            {
+              "name": "end_date",
+              "label": "End Date",
+              "type": "date",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "promotionFields",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Promotion Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "code",
+              "label": "Promo Code",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "discount_type",
+              "label": "Discount Type",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "discount_value",
+              "label": "Discount Value",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "min_purchase",
+              "label": "Min Purchase",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "max_discount",
+              "label": "Max Discount",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "usage_limit",
+              "label": "Usage Limit",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "used_count",
+              "label": "Used Count",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "start_date",
+              "label": "Start Date",
+              "type": "date",
+              "required": true
+            },
+            {
+              "name": "end_date",
+              "label": "End Date",
+              "type": "date",
+              "required": true
+            }
+          ]
+        }
+      ],
+      "tabs": [
+        "campaigns",
+        "promotions"
+      ],
+      "tables": [
+        {
+          "headers": [
+            "Name",
+            "Type",
+            "Status",
+            "Budget",
+            "Spent",
+            "Impressions",
+            "Clicks",
+            "Conversions",
+            "CTR",
+            "Period",
+            "Actions"
+          ]
+        },
+        {
+          "headers": [
+            "Name",
+            "Code",
+            "Discount",
+            "Min Purchase",
+            "Usage",
+            "Status",
+            "Valid Period",
+            "Actions"
+          ]
+        }
+      ],
+      "editModalPattern": {
+        "hasEditModalState": true,
+        "handleEdit": "setEditModal({ isOpen: true, type, data: item",
+        "handleSave": "\n    try {\n      setSaving(true);\n      if (editModal.type === 'campaign') {\n        await marketingAPI.updateCampaign(editModal.data.id, formData);",
+        "modalProps": {
+          "isOpen": "editModal.isOpen",
+          "onClose": "() => setEditModal({ isOpen: false, type: null, data: null",
+          "title": null,
+          "fields": "editModal.type === 'campaign' ? campaignFields : promotionFields",
+          "data": "editModal.data",
+          "onSave": "handleSave"
+        },
+        "apiCall": {
+          "api": "marketingAPI",
+          "method": "updateCampaign",
+          "params": "editModal.data.id, formData"
+        }
+      },
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "campaigns",
+          "setterName": "setCampaigns",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "promotions",
+          "setterName": "setPromotions",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "activeTab",
+          "setterName": "setActiveTab",
+          "initialValue": "'campaigns'"
+        },
+        {
+          "type": "useState",
+          "stateName": "editModal",
+          "setterName": "setEditModal",
+          "initialValue": "{ isOpen: false, type: null, data: null }"
+        },
+        {
+          "type": "useState",
+          "stateName": "saving",
+          "setterName": "setSaving",
+          "initialValue": "false"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [
+            "activeTab"
+          ],
+          "body": "\n    fetchData();\n  "
+        }
+      ]
+    },
+    {
+      "path": "/operations",
+      "file": "client\\app\\operations\\page.js",
+      "title": "Operations",
+      "components": [
+        {
+          "name": "Layout",
+          "from": "../../components/Layout"
+        },
+        {
+          "name": "EditModal",
+          "from": "../../components/EditModal"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "operationsAPI",
+          "method": "getOrders",
+          "params": "{ limit: 50 }"
+        },
+        {
+          "api": "operationsAPI",
+          "method": "getOrderStats",
+          "params": ""
+        },
+        {
+          "api": "operationsAPI",
+          "method": "getCustomers",
+          "params": "{ limit: 50 }"
+        },
+        {
+          "api": "operationsAPI",
+          "method": "updateOrder",
+          "params": "editModal.data.id, formData"
+        },
+        {
+          "api": "operationsAPI",
+          "method": "updateCustomer",
+          "params": "editModal.data.id, formData"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Orders",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Customers",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        },
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        }
+      ],
+      "links": [],
+      "forms": [
+        {
+          "name": "orderFields",
+          "fields": [
+            {
+              "name": "order_number",
+              "label": "Order Number",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "customer_name",
+              "label": "Customer Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "customer_email",
+              "label": "Customer Email",
+              "type": "email",
+              "required": true
+            },
+            {
+              "name": "total_amount",
+              "label": "Total Amount",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "payment_status",
+              "label": "Payment Status",
+              "type": "select",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "customerFields",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "type": "email",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "label": "Phone",
+              "type": "text",
+              "required": false
+            },
+            {
+              "name": "total_orders",
+              "label": "Total Orders",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "total_spent",
+              "label": "Total Spent",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            }
+          ]
+        }
+      ],
+      "tabs": [
+        "orders",
+        "customers"
+      ],
+      "tables": [
+        {
+          "headers": [
+            "Order #",
+            "Customer",
+            "Email",
+            "Amount",
+            "Status",
+            "Payment",
+            "Date",
+            "Actions"
+          ]
+        },
+        {
+          "headers": [
+            "Name",
+            "Email",
+            "Phone",
+            "Total Orders",
+            "Total Spent",
+            "Status",
+            "Actions"
+          ]
+        }
+      ],
+      "editModalPattern": {
+        "hasEditModalState": true,
+        "handleEdit": "setEditModal({ isOpen: true, type, data: item",
+        "handleSave": "\n    try {\n      setSaving(true);\n      if (editModal.type === 'order') {\n        await operationsAPI.updateOrder(editModal.data.id, formData);",
+        "modalProps": {
+          "isOpen": "editModal.isOpen",
+          "onClose": "() => setEditModal({ isOpen: false, type: null, data: null",
+          "title": null,
+          "fields": "editModal.type === 'order' ? orderFields : customerFields",
+          "data": "editModal.data",
+          "onSave": "handleSave"
+        },
+        "apiCall": {
+          "api": "operationsAPI",
+          "method": "updateOrder",
+          "params": "editModal.data.id, formData"
+        }
+      },
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "orders",
+          "setterName": "setOrders",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "customers",
+          "setterName": "setCustomers",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "orderStats",
+          "setterName": "setOrderStats",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "activeTab",
+          "setterName": "setActiveTab",
+          "initialValue": "'orders'"
+        },
+        {
+          "type": "useState",
+          "stateName": "editModal",
+          "setterName": "setEditModal",
+          "initialValue": "{ isOpen: false, type: null, data: null }"
+        },
+        {
+          "type": "useState",
+          "stateName": "saving",
+          "setterName": "setSaving",
+          "initialValue": "false"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [
+            "activeTab"
+          ],
+          "body": "\n    fetchData();\n  "
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "file": "client\\app\\page.js",
+      "title": "Dashboard",
+      "components": [
+        {
+          "name": "Link",
+          "from": "next/link"
+        },
+        {
+          "name": "Layout",
+          "from": "../components/Layout"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "analyticsAPI",
+          "method": "getOverview",
+          "params": ""
+        }
+      ],
+      "buttons": [],
+      "links": [],
+      "forms": [],
+      "tabs": [],
+      "tables": [],
+      "editModalPattern": null,
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "overview",
+          "setterName": "setOverview",
+          "initialValue": "null"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "error",
+          "setterName": "setError",
+          "initialValue": "null"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [],
+          "body": "\n    fetchOverview();\n  "
+        }
+      ]
+    },
+    {
+      "path": "/users",
+      "file": "client\\app\\users\\page.js",
+      "title": "User Management",
+      "components": [
+        {
+          "name": "Layout",
+          "from": "../../components/Layout"
+        },
+        {
+          "name": "EditModal",
+          "from": "../../components/EditModal"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "usersAPI",
+          "method": "getUsers",
+          "params": "{ limit: 50 }"
+        },
+        {
+          "api": "usersAPI",
+          "method": "updateUser",
+          "params": "editModal.data.id, formData"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Edit",
+          "onClick": null,
+          "type": "primary",
+          "className": "btn btn-sm btn-primary"
+        }
+      ],
+      "links": [],
+      "forms": [
+        {
+          "name": "userFields",
+          "fields": [
+            {
+              "name": "username",
+              "label": "Username",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "type": "email",
+              "required": true
+            },
+            {
+              "name": "full_name",
+              "label": "Full Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "name": "role",
+              "label": "Role",
+              "type": "select",
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true
+            }
+          ]
+        }
+      ],
+      "tabs": [],
+      "tables": [
+        {
+          "headers": [
+            "Username",
+            "Email",
+            "Full Name",
+            "Role",
+            "Domain Access",
+            "Status",
+            "Last Login",
+            "Created",
+            "Actions"
+          ]
+        }
+      ],
+      "editModalPattern": {
+        "hasEditModalState": true,
+        "handleEdit": "setEditModal({ isOpen: true, data: user",
+        "handleSave": "\n    try {\n      setSaving(true);\n      await usersAPI.updateUser(editModal.data.id, formData);\n      setEditModal({ isOpen: false, data: null });\n      fetchData();",
+        "modalProps": {
+          "isOpen": "editModal.isOpen",
+          "onClose": "() => setEditModal({ isOpen: false, data: null",
+          "title": "Edit User",
+          "fields": "userFields",
+          "data": "editModal.data",
+          "onSave": "handleSave"
+        },
+        "apiCall": {
+          "api": "usersAPI",
+          "method": "updateUser",
+          "params": "editModal.data.id, formData"
+        }
+      },
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "users",
+          "setterName": "setUsers",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "editModal",
+          "setterName": "setEditModal",
+          "initialValue": "{ isOpen: false, data: null }"
+        },
+        {
+          "type": "useState",
+          "stateName": "saving",
+          "setterName": "setSaving",
+          "initialValue": "false"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [],
+          "body": "\n    fetchData();\n  "
+        }
+      ]
+    },
+    {
+      "path": "/users/{id}",
+      "file": "client\\app\\users\\[id]\\page.js",
+      "title": "User Details",
+      "components": [
+        {
+          "name": "Layout",
+          "from": "../../../components/Layout"
+        }
+      ],
+      "apiCalls": [
+        {
+          "api": "usersAPI",
+          "method": "getUser",
+          "params": "userId"
+        },
+        {
+          "api": "userPreferencesAPI",
+          "method": "getPreferences",
+          "params": "userId"
+        },
+        {
+          "api": "userActivityAPI",
+          "method": "getActivity",
+          "params": "userId, { limit: 50 }"
+        },
+        {
+          "api": "userActivityAPI",
+          "method": "getActivityStats",
+          "params": "userId, { days: 30 }"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Overview",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Preferences",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        },
+        {
+          "text": "Activity History",
+          "onClick": null,
+          "type": "default",
+          "className": ""
+        }
+      ],
+      "links": [],
+      "forms": [],
+      "tabs": [
+        "overview",
+        "preferences",
+        "activity"
+      ],
+      "tables": [
+        {
+          "headers": [
+            "Date",
+            "Action",
+            "Description",
+            "Module",
+            "Entity",
+            "IP Address"
+          ]
+        }
+      ],
+      "editModalPattern": null,
+      "stateManagement": [
+        {
+          "type": "useState",
+          "stateName": "user",
+          "setterName": "setUser",
+          "initialValue": "null"
+        },
+        {
+          "type": "useState",
+          "stateName": "preferences",
+          "setterName": "setPreferences",
+          "initialValue": "null"
+        },
+        {
+          "type": "useState",
+          "stateName": "activity",
+          "setterName": "setActivity",
+          "initialValue": "[]"
+        },
+        {
+          "type": "useState",
+          "stateName": "activityStats",
+          "setterName": "setActivityStats",
+          "initialValue": "null"
+        },
+        {
+          "type": "useState",
+          "stateName": "loading",
+          "setterName": "setLoading",
+          "initialValue": "true"
+        },
+        {
+          "type": "useState",
+          "stateName": "activeTab",
+          "setterName": "setActiveTab",
+          "initialValue": "'overview'"
+        },
+        {
+          "type": "useEffect",
+          "dependencies": [
+            "userId",
+            "activeTab"
+          ],
+          "body": "\r\n    if (userId) {\r\n      fetchData();\r\n    }\r\n  "
+        }
+      ]
+    }
+  ],
+  "apiRoutes": [
+    {
+      "method": "GET",
+      "path": "/analytics/overview",
+      "basePath": "/analytics",
+      "routePath": "/overview",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\analytics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/revenue-trends",
+      "basePath": "/analytics",
+      "routePath": "/revenue-trends",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\analytics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/top-products",
+      "basePath": "/analytics",
+      "routePath": "/top-products",
+      "queryParams": [
+        "limit = 10"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\analytics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/orders",
+      "basePath": "/operations",
+      "routePath": "/orders",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/orders/stats",
+      "basePath": "/operations",
+      "routePath": "/orders/stats",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/orders/{id}",
+      "basePath": "/operations",
+      "routePath": "/orders/{id}",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "POST",
+      "path": "/operations/orders",
+      "basePath": "/operations",
+      "routePath": "/orders",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [
+        "order_number",
+        "customer_name",
+        "customer_email",
+        "total_amount",
+        "status",
+        "payment_status"
+      ],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/operations/orders/{id}",
+      "basePath": "/operations",
+      "routePath": "/orders/{id}",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [
+        "status",
+        "payment_status",
+        "total_amount"
+      ],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/customers",
+      "basePath": "/operations",
+      "routePath": "/customers",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/customers/{id}",
+      "basePath": "/operations",
+      "routePath": "/customers/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/operations/customers/{id}",
+      "basePath": "/operations",
+      "routePath": "/customers/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "email",
+        "phone",
+        "total_orders",
+        "total_spent",
+        "status"
+      ],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/campaigns",
+      "basePath": "/marketing",
+      "routePath": "/campaigns",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/campaigns/{id}",
+      "basePath": "/marketing",
+      "routePath": "/campaigns/{id}",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "POST",
+      "path": "/marketing/campaigns",
+      "basePath": "/marketing",
+      "routePath": "/campaigns",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [
+        "name",
+        "type",
+        "status",
+        "budget",
+        "start_date",
+        "end_date"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/marketing/campaigns/{id}",
+      "basePath": "/marketing",
+      "routePath": "/campaigns/{id}",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [
+        "name",
+        "status",
+        "budget",
+        "spent",
+        "impressions",
+        "clicks",
+        "conversions"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/promotions",
+      "basePath": "/marketing",
+      "routePath": "/promotions",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/promotions/{id}",
+      "basePath": "/marketing",
+      "routePath": "/promotions/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "POST",
+      "path": "/marketing/promotions",
+      "basePath": "/marketing",
+      "routePath": "/promotions",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "code",
+        "discount_type",
+        "discount_value",
+        "min_purchase",
+        "max_discount",
+        "usage_limit",
+        "status",
+        "start_date",
+        "end_date"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/marketing/promotions/{id}",
+      "basePath": "/marketing",
+      "routePath": "/promotions/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "status",
+        "used_count"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/products",
+      "basePath": "/inventory",
+      "routePath": "/products",
+      "queryParams": [
+        "category",
+        "status",
+        "low_stock"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/products/stats",
+      "basePath": "/inventory",
+      "routePath": "/products/stats",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/products/{id}",
+      "basePath": "/inventory",
+      "routePath": "/products/{id}",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/products",
+      "basePath": "/inventory",
+      "routePath": "/products",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [
+        "sku",
+        "name",
+        "description",
+        "category",
+        "price",
+        "cost",
+        "stock_quantity",
+        "low_stock_threshold",
+        "status"
+      ],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/inventory/products/{id}",
+      "basePath": "/inventory",
+      "routePath": "/products/{id}",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [
+        "name",
+        "description",
+        "price",
+        "cost",
+        "stock_quantity",
+        "low_stock_threshold",
+        "status"
+      ],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/stock-movements",
+      "basePath": "/inventory",
+      "routePath": "/stock-movements",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/stock-movements",
+      "basePath": "/inventory",
+      "routePath": "/stock-movements",
+      "queryParams": [],
+      "bodyParams": [
+        "product_id",
+        "type",
+        "quantity",
+        "reason",
+        "reference"
+      ],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/shipments",
+      "basePath": "/logistics",
+      "routePath": "/shipments",
+      "queryParams": [
+        "status",
+        "order_id"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/shipments/stats",
+      "basePath": "/logistics",
+      "routePath": "/shipments/stats",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/shipments/{id}",
+      "basePath": "/logistics",
+      "routePath": "/shipments/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "POST",
+      "path": "/logistics/shipments",
+      "basePath": "/logistics",
+      "routePath": "/shipments",
+      "queryParams": [],
+      "bodyParams": [
+        "order_id",
+        "tracking_number",
+        "carrier",
+        "status",
+        "origin_address",
+        "destination_address",
+        "estimated_delivery",
+        "shipping_cost"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/logistics/shipments/{id}",
+      "basePath": "/logistics",
+      "routePath": "/shipments/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "status",
+        "tracking_number",
+        "estimated_delivery",
+        "actual_delivery"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/warehouses",
+      "basePath": "/logistics",
+      "routePath": "/warehouses",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/warehouses/{id}",
+      "basePath": "/logistics",
+      "routePath": "/warehouses/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "POST",
+      "path": "/logistics/warehouses",
+      "basePath": "/logistics",
+      "routePath": "/warehouses",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "location",
+        "capacity",
+        "status"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/logistics/warehouses/{id}",
+      "basePath": "/logistics",
+      "routePath": "/warehouses/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "location",
+        "capacity",
+        "current_stock",
+        "status"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/overview",
+      "basePath": "/analytics",
+      "routePath": "/overview",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\analytics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/revenue-trends",
+      "basePath": "/analytics",
+      "routePath": "/revenue-trends",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\analytics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/top-products",
+      "basePath": "/analytics",
+      "routePath": "/top-products",
+      "queryParams": [
+        "limit = 10"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\analytics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/users/",
+      "basePath": "/users",
+      "routePath": "/",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "basePath": "/users",
+      "routePath": "/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "POST",
+      "path": "/users/",
+      "basePath": "/users",
+      "routePath": "/",
+      "queryParams": [],
+      "bodyParams": [
+        "username",
+        "email",
+        "password_hash",
+        "full_name",
+        "role",
+        "status"
+      ],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{id}",
+      "basePath": "/users",
+      "routePath": "/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "username",
+        "email",
+        "full_name",
+        "role",
+        "status",
+        "password_hash"
+      ],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "basePath": "/users",
+      "routePath": "/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "GET",
+      "path": "/user-preferences/{userId}",
+      "basePath": "/user-preferences",
+      "routePath": "/{userId}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\userPreferences.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/user-preferences/{userId}",
+      "basePath": "/user-preferences",
+      "routePath": "/{userId}",
+      "queryParams": [],
+      "bodyParams": [
+        "theme",
+        "language",
+        "timezone",
+        "date_format",
+        "time_format",
+        "notifications_enabled",
+        "email_notifications",
+        "dashboard_layout",
+        "items_per_page",
+        "default_view",
+        "favorite_modules",
+        "custom_settings",
+        ""
+      ],
+      "file": "server\\routes\\userPreferences.js"
+    },
+    {
+      "method": "GET",
+      "path": "/user-activity/{userId}",
+      "basePath": "/user-activity",
+      "routePath": "/{userId}",
+      "queryParams": [
+        "limit = 50",
+        "offset = 0",
+        "action_type",
+        "module: moduleFilter",
+        "entity_type"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\userActivity.js"
+    },
+    {
+      "method": "POST",
+      "path": "/user-activity/{userId}",
+      "basePath": "/user-activity",
+      "routePath": "/{userId}",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [
+        "action_type",
+        "action_description",
+        "module",
+        "entity_type",
+        "entity_id",
+        "ip_address",
+        "user_agent",
+        "metadata",
+        ""
+      ],
+      "file": "server\\routes\\userActivity.js"
+    },
+    {
+      "method": "GET",
+      "path": "/user-activity/{userId}/stats",
+      "basePath": "/user-activity",
+      "routePath": "/{userId}/stats",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\userActivity.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/products",
+      "basePath": "/inventory",
+      "routePath": "/products",
+      "queryParams": [
+        "category",
+        "status",
+        "low_stock"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/products/stats",
+      "basePath": "/inventory",
+      "routePath": "/products/stats",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/products/{id}",
+      "basePath": "/inventory",
+      "routePath": "/products/{id}",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/products",
+      "basePath": "/inventory",
+      "routePath": "/products",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [
+        "sku",
+        "name",
+        "description",
+        "category",
+        "price",
+        "cost",
+        "stock_quantity",
+        "low_stock_threshold",
+        "status"
+      ],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/inventory/products/{id}",
+      "basePath": "/inventory",
+      "routePath": "/products/{id}",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [
+        "name",
+        "description",
+        "price",
+        "cost",
+        "stock_quantity",
+        "low_stock_threshold",
+        "status"
+      ],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory/stock-movements",
+      "basePath": "/inventory",
+      "routePath": "/stock-movements",
+      "queryParams": [
+        "product_id",
+        "limit = 100"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/stock-movements",
+      "basePath": "/inventory",
+      "routePath": "/stock-movements",
+      "queryParams": [],
+      "bodyParams": [
+        "product_id",
+        "type",
+        "quantity",
+        "reason",
+        "reference"
+      ],
+      "file": "server\\routes\\inventory.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/shipments",
+      "basePath": "/logistics",
+      "routePath": "/shipments",
+      "queryParams": [
+        "status",
+        "order_id"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/shipments/stats",
+      "basePath": "/logistics",
+      "routePath": "/shipments/stats",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/shipments/{id}",
+      "basePath": "/logistics",
+      "routePath": "/shipments/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "POST",
+      "path": "/logistics/shipments",
+      "basePath": "/logistics",
+      "routePath": "/shipments",
+      "queryParams": [],
+      "bodyParams": [
+        "order_id",
+        "tracking_number",
+        "carrier",
+        "status",
+        "origin_address",
+        "destination_address",
+        "estimated_delivery",
+        "shipping_cost"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/logistics/shipments/{id}",
+      "basePath": "/logistics",
+      "routePath": "/shipments/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "status",
+        "tracking_number",
+        "estimated_delivery",
+        "actual_delivery"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/warehouses",
+      "basePath": "/logistics",
+      "routePath": "/warehouses",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/logistics/warehouses/{id}",
+      "basePath": "/logistics",
+      "routePath": "/warehouses/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "POST",
+      "path": "/logistics/warehouses",
+      "basePath": "/logistics",
+      "routePath": "/warehouses",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "location",
+        "capacity",
+        "status"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/logistics/warehouses/{id}",
+      "basePath": "/logistics",
+      "routePath": "/warehouses/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "location",
+        "capacity",
+        "current_stock",
+        "status"
+      ],
+      "file": "server\\routes\\logistics.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/campaigns",
+      "basePath": "/marketing",
+      "routePath": "/campaigns",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/campaigns/{id}",
+      "basePath": "/marketing",
+      "routePath": "/campaigns/{id}",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "POST",
+      "path": "/marketing/campaigns",
+      "basePath": "/marketing",
+      "routePath": "/campaigns",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [
+        "name",
+        "type",
+        "status",
+        "budget",
+        "start_date",
+        "end_date"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/marketing/campaigns/{id}",
+      "basePath": "/marketing",
+      "routePath": "/campaigns/{id}",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [
+        "name",
+        "status",
+        "budget",
+        "spent",
+        "impressions",
+        "clicks",
+        "conversions"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/promotions",
+      "basePath": "/marketing",
+      "routePath": "/promotions",
+      "queryParams": [
+        "status"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/marketing/promotions/{id}",
+      "basePath": "/marketing",
+      "routePath": "/promotions/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "POST",
+      "path": "/marketing/promotions",
+      "basePath": "/marketing",
+      "routePath": "/promotions",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "code",
+        "discount_type",
+        "discount_value",
+        "min_purchase",
+        "max_discount",
+        "usage_limit",
+        "status",
+        "start_date",
+        "end_date"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/marketing/promotions/{id}",
+      "basePath": "/marketing",
+      "routePath": "/promotions/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "status",
+        "used_count"
+      ],
+      "file": "server\\routes\\marketing.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/orders",
+      "basePath": "/operations",
+      "routePath": "/orders",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/orders/stats",
+      "basePath": "/operations",
+      "routePath": "/orders/stats",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/orders/{id}",
+      "basePath": "/operations",
+      "routePath": "/orders/{id}",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "POST",
+      "path": "/operations/orders",
+      "basePath": "/operations",
+      "routePath": "/orders",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [
+        "order_number",
+        "customer_name",
+        "customer_email",
+        "total_amount",
+        "status",
+        "payment_status"
+      ],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/operations/orders/{id}",
+      "basePath": "/operations",
+      "routePath": "/orders/{id}",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [
+        "status",
+        "payment_status",
+        "total_amount"
+      ],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/customers",
+      "basePath": "/operations",
+      "routePath": "/customers",
+      "queryParams": [
+        "status",
+        "limit = 50",
+        "offset = 0"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/operations/customers/{id}",
+      "basePath": "/operations",
+      "routePath": "/customers/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/operations/customers/{id}",
+      "basePath": "/operations",
+      "routePath": "/customers/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "name",
+        "email",
+        "phone",
+        "total_orders",
+        "total_spent",
+        "status"
+      ],
+      "file": "server\\routes\\operations.js"
+    },
+    {
+      "method": "GET",
+      "path": "/userActivity/{userId}",
+      "basePath": "/userActivity",
+      "routePath": "/{userId}",
+      "queryParams": [
+        "limit = 50",
+        "offset = 0",
+        "action_type",
+        "module: moduleFilter",
+        "entity_type"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\userActivity.js"
+    },
+    {
+      "method": "POST",
+      "path": "/userActivity/{userId}",
+      "basePath": "/userActivity",
+      "routePath": "/{userId}",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [
+        "action_type",
+        "action_description",
+        "module",
+        "entity_type",
+        "entity_id",
+        "ip_address",
+        "user_agent",
+        "metadata",
+        ""
+      ],
+      "file": "server\\routes\\userActivity.js"
+    },
+    {
+      "method": "GET",
+      "path": "/userActivity/{userId}/stats",
+      "basePath": "/userActivity",
+      "routePath": "/{userId}/stats",
+      "queryParams": [
+        "days = 30"
+      ],
+      "bodyParams": [],
+      "file": "server\\routes\\userActivity.js"
+    },
+    {
+      "method": "GET",
+      "path": "/userPreferences/{userId}",
+      "basePath": "/userPreferences",
+      "routePath": "/{userId}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\userPreferences.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/userPreferences/{userId}",
+      "basePath": "/userPreferences",
+      "routePath": "/{userId}",
+      "queryParams": [],
+      "bodyParams": [
+        "theme",
+        "language",
+        "timezone",
+        "date_format",
+        "time_format",
+        "notifications_enabled",
+        "email_notifications",
+        "dashboard_layout",
+        "items_per_page",
+        "default_view",
+        "favorite_modules",
+        "custom_settings",
+        ""
+      ],
+      "file": "server\\routes\\userPreferences.js"
+    },
+    {
+      "method": "GET",
+      "path": "/users/",
+      "basePath": "/users",
+      "routePath": "/",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "basePath": "/users",
+      "routePath": "/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "POST",
+      "path": "/users/",
+      "basePath": "/users",
+      "routePath": "/",
+      "queryParams": [],
+      "bodyParams": [
+        "username",
+        "email",
+        "password_hash",
+        "full_name",
+        "role",
+        "status"
+      ],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{id}",
+      "basePath": "/users",
+      "routePath": "/{id}",
+      "queryParams": [],
+      "bodyParams": [
+        "username",
+        "email",
+        "full_name",
+        "role",
+        "status",
+        "password_hash"
+      ],
+      "file": "server\\routes\\users.js"
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "basePath": "/users",
+      "routePath": "/{id}",
+      "queryParams": [],
+      "bodyParams": [],
+      "file": "server\\routes\\users.js"
+    }
+  ],
+  "database": {
+    "tables": [
+      {
+        "name": "orders",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "order_number",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "customer_name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "customer_email",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "total_amount",
+            "type": "REAL",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "NOT NULL DEFAULT 'pending'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "payment_status",
+            "type": "TEXT",
+            "constraints": "NOT NULL DEFAULT 'unpaid'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "updated_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "customers",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "email",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "total_orders",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "total_spent",
+            "type": "REAL",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'active'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "campaigns",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "type",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'draft'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "budget",
+            "type": "REAL",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "spent",
+            "type": "REAL",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "impressions",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "clicks",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "conversions",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "promotions",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "code",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "discount_type",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "discount_value",
+            "type": "REAL",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "min_purchase",
+            "type": "REAL",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "used_count",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'active'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "products",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "sku",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "category",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "price",
+            "type": "REAL",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "cost",
+            "type": "REAL",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "stock_quantity",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "low_stock_threshold",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 10",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'active'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "updated_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "stock_movements",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "product_id",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "type",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "quantity",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "FOREIGN",
+            "type": "KEY",
+            "constraints": "(product_id",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "shipments",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "order_id",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "tracking_number",
+            "type": "TEXT",
+            "constraints": "UNIQUE",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "carrier",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'pending'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "origin_address",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "destination_address",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "shipping_cost",
+            "type": "REAL",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "updated_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "FOREIGN",
+            "type": "KEY",
+            "constraints": "(order_id",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "warehouses",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "location",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "capacity",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "current_stock",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'active'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "daily_stats",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "date",
+            "type": "DATE",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "revenue",
+            "type": "REAL",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "orders_count",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "customers_count",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "products_sold",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "users",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "username",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "email",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "password_hash",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "full_name",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "role",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'admin'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'active'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "updated_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "user_preferences",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "theme",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'light'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "language",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'en'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "timezone",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'UTC'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "date_format",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'MM/DD/YYYY'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "time_format",
+            "type": "TEXT",
+            "constraints": "DEFAULT '12h'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "notifications_enabled",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 1",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "email_notifications",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 1",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "dashboard_layout",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'default'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "items_per_page",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 25",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "default_view",
+            "type": "TEXT",
+            "constraints": "DEFAULT 'table'",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "updated_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "FOREIGN",
+            "type": "KEY",
+            "constraints": "(user_id",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "user_activity_history",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "action_type",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "action_description",
+            "type": "TEXT",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "FOREIGN",
+            "type": "KEY",
+            "constraints": "(user_id",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "name": "user_sessions",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT",
+            "isPrimaryKey": true,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "constraints": "NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "session_token",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL",
+            "isPrimaryKey": false,
+            "isUnique": true,
+            "isNotNull": true,
+            "hasDefault": false,
+            "isForeignKey": false
+          },
+          {
+            "name": "last_activity",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "created_at",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": true,
+            "isForeignKey": false
+          },
+          {
+            "name": "FOREIGN",
+            "type": "KEY",
+            "constraints": "(user_id",
+            "isPrimaryKey": false,
+            "isUnique": false,
+            "isNotNull": false,
+            "hasDefault": false,
+            "isForeignKey": false
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "relationships": []
+  },
+  "components": [
+    {
+      "name": "EditModal",
+      "file": "client\\components\\EditModal.js",
+      "props": [
+        "isOpen",
+        "onClose",
+        "title",
+        "fields",
+        "data",
+        "onSave",
+        "loading"
+      ],
+      "usage": {
+        "imports": [],
+        "renders": [
+          "div",
+          "h2",
+          "button",
+          "form",
+          "label",
+          "span",
+          "select",
+          "option",
+          "textarea",
+          "input"
+        ]
+      },
+      "patterns": {
+        "props": [
+          "isOpen",
+          "onClose",
+          "title",
+          "fields",
+          "data",
+          "onSave",
+          "loading"
+        ],
+        "formFields": [],
+        "stateManagement": [
+          {
+            "type": "useState",
+            "stateName": "formData",
+            "setterName": "setFormData",
+            "initialValue": "{}"
+          },
+          {
+            "type": "useEffect",
+            "dependencies": [
+              "data",
+              "fields"
+            ],
+            "body": "\r\n    if (data) {\r\n      setFormData(data);\r\n    } else {\r\n      const initialData = {};\r\n      fiel"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Layout",
+      "file": "client\\components\\Layout.js",
+      "props": [
+        "children",
+        "title"
+      ],
+      "usage": {
+        "imports": [
+          {
+            "name": "Link",
+            "from": "next/link"
+          },
+          {
+            "name": "Sidebar",
+            "from": "./Sidebar"
+          }
+        ],
+        "renders": [
+          "div",
+          "Sidebar",
+          "main",
+          "span",
+          "Link",
+          "h1"
+        ]
+      },
+      "patterns": {}
+    },
+    {
+      "name": "Sidebar",
+      "file": "client\\components\\Sidebar.js",
+      "props": [],
+      "usage": {
+        "imports": [
+          {
+            "name": "Link",
+            "from": "next/link"
+          },
+          {
+            "name": "UserSwitcher",
+            "from": "./UserSwitcher"
+          }
+        ],
+        "renders": [
+          "aside",
+          "div",
+          "h1",
+          "span",
+          "nav",
+          "ul",
+          "li",
+          "Link",
+          "button",
+          "UserSwitcher"
+        ]
+      },
+      "patterns": {}
+    },
+    {
+      "name": "UserContext",
+      "file": "client\\components\\UserProvider.js",
+      "props": [
+        "children"
+      ],
+      "usage": {
+        "imports": [],
+        "renders": [
+          "UserContext"
+        ]
+      },
+      "patterns": {}
+    },
+    {
+      "name": "UserSwitcher",
+      "file": "client\\components\\UserSwitcher.js",
+      "props": [],
+      "usage": {
+        "imports": [],
+        "renders": [
+          "div",
+          "button",
+          "span",
+          "strong"
+        ]
+      },
+      "patterns": {}
+    }
+  ],
+  "navigation": {
+    "links": [],
+    "menuItems": []
+  },
+  "forms": [],
+  "buttons": [],
+  "apiEndpoints": [
+    {
+      "api": "operationsAPI",
+      "method": "getOrders",
+      "httpMethod": "GET",
+      "path": "/operations/orders",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "operationsAPI",
+      "method": "getOrder",
+      "httpMethod": "GET",
+      "path": "/operations/orders/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "operationsAPI",
+      "method": "createOrder",
+      "httpMethod": "POST",
+      "path": "/operations/orders",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "operationsAPI",
+      "method": "updateOrder",
+      "httpMethod": "PUT",
+      "path": "/operations/orders/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "operationsAPI",
+      "method": "getCustomers",
+      "httpMethod": "GET",
+      "path": "/operations/customers",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "operationsAPI",
+      "method": "getCustomer",
+      "httpMethod": "GET",
+      "path": "/operations/customers/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "operationsAPI",
+      "method": "updateCustomer",
+      "httpMethod": "PUT",
+      "path": "/operations/customers/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "operationsAPI",
+      "method": "getOrderStats",
+      "httpMethod": "GET",
+      "path": "/operations/orders/stats",
+      "params": "",
+      "paramType": "none",
+      "options": ""
+    },
+    {
+      "api": "marketingAPI",
+      "method": "getCampaigns",
+      "httpMethod": "GET",
+      "path": "/marketing/campaigns",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "marketingAPI",
+      "method": "getCampaign",
+      "httpMethod": "GET",
+      "path": "/marketing/campaigns/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "marketingAPI",
+      "method": "createCampaign",
+      "httpMethod": "POST",
+      "path": "/marketing/campaigns",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "marketingAPI",
+      "method": "updateCampaign",
+      "httpMethod": "PUT",
+      "path": "/marketing/campaigns/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "marketingAPI",
+      "method": "getPromotions",
+      "httpMethod": "GET",
+      "path": "/marketing/promotions",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "marketingAPI",
+      "method": "getPromotion",
+      "httpMethod": "GET",
+      "path": "/marketing/promotions/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "marketingAPI",
+      "method": "createPromotion",
+      "httpMethod": "POST",
+      "path": "/marketing/promotions",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "marketingAPI",
+      "method": "updatePromotion",
+      "httpMethod": "PUT",
+      "path": "/marketing/promotions/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "getProducts",
+      "httpMethod": "GET",
+      "path": "/inventory/products",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "getProduct",
+      "httpMethod": "GET",
+      "path": "/inventory/products/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "createProduct",
+      "httpMethod": "POST",
+      "path": "/inventory/products",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "updateProduct",
+      "httpMethod": "PUT",
+      "path": "/inventory/products/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "getStockMovements",
+      "httpMethod": "GET",
+      "path": "/inventory/stock-movements",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "createStockMovement",
+      "httpMethod": "POST",
+      "path": "/inventory/stock-movements",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "inventoryAPI",
+      "method": "getProductStats",
+      "httpMethod": "GET",
+      "path": "/inventory/products/stats",
+      "params": "",
+      "paramType": "none",
+      "options": ""
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "getShipments",
+      "httpMethod": "GET",
+      "path": "/logistics/shipments",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "getShipment",
+      "httpMethod": "GET",
+      "path": "/logistics/shipments/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "createShipment",
+      "httpMethod": "POST",
+      "path": "/logistics/shipments",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "updateShipment",
+      "httpMethod": "PUT",
+      "path": "/logistics/shipments/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "getWarehouses",
+      "httpMethod": "GET",
+      "path": "/logistics/warehouses",
+      "params": "",
+      "paramType": "none",
+      "options": ""
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "getWarehouse",
+      "httpMethod": "GET",
+      "path": "/logistics/warehouses/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "createWarehouse",
+      "httpMethod": "POST",
+      "path": "/logistics/warehouses",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "updateWarehouse",
+      "httpMethod": "PUT",
+      "path": "/logistics/warehouses/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "logisticsAPI",
+      "method": "getShipmentStats",
+      "httpMethod": "GET",
+      "path": "/logistics/shipments/stats",
+      "params": "",
+      "paramType": "none",
+      "options": ""
+    },
+    {
+      "api": "analyticsAPI",
+      "method": "getOverview",
+      "httpMethod": "GET",
+      "path": "/analytics/overview",
+      "params": "",
+      "paramType": "none",
+      "options": ""
+    },
+    {
+      "api": "analyticsAPI",
+      "method": "getRevenueTrends",
+      "httpMethod": "GET",
+      "path": "/analytics/revenue-trends",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "analyticsAPI",
+      "method": "getTopProducts",
+      "httpMethod": "GET",
+      "path": "/analytics/top-products",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "usersAPI",
+      "method": "getUsers",
+      "httpMethod": "GET",
+      "path": "/users",
+      "params": "params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "usersAPI",
+      "method": "getUser",
+      "httpMethod": "GET",
+      "path": "/users/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "usersAPI",
+      "method": "createUser",
+      "httpMethod": "POST",
+      "path": "/users",
+      "params": "data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "usersAPI",
+      "method": "updateUser",
+      "httpMethod": "PUT",
+      "path": "/users/{id}",
+      "params": "id, data",
+      "paramType": "idAndData",
+      "options": ", data"
+    },
+    {
+      "api": "usersAPI",
+      "method": "deleteUser",
+      "httpMethod": "DELETE",
+      "path": "/users/{id}",
+      "params": "id",
+      "paramType": "id",
+      "options": ""
+    },
+    {
+      "api": "userPreferencesAPI",
+      "method": "getPreferences",
+      "httpMethod": "GET",
+      "path": "/user-preferences/{userId}",
+      "params": "userId",
+      "paramType": "none",
+      "options": ""
+    },
+    {
+      "api": "userPreferencesAPI",
+      "method": "updatePreferences",
+      "httpMethod": "PUT",
+      "path": "/user-preferences/{userId}",
+      "params": "userId, data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "userActivityAPI",
+      "method": "getActivity",
+      "httpMethod": "GET",
+      "path": "/user-activity/{userId}",
+      "params": "userId, params",
+      "paramType": "query",
+      "options": ", { params }"
+    },
+    {
+      "api": "userActivityAPI",
+      "method": "logActivity",
+      "httpMethod": "POST",
+      "path": "/user-activity/{userId}",
+      "params": "userId, data",
+      "paramType": "data",
+      "options": ", data"
+    },
+    {
+      "api": "userActivityAPI",
+      "method": "getActivityStats",
+      "httpMethod": "GET",
+      "path": "/user-activity/{userId}/stats",
+      "params": "userId, params",
+      "paramType": "query",
+      "options": ", { params }"
+    }
+  ],
+  "componentPatterns": [],
+  "stateManagement": []
+}
